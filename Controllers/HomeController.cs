@@ -8,19 +8,27 @@ namespace GrpcClientDemo.Controllers;
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
+    private readonly GrpcGreeterClient.Greeter.GreeterClient _client;
 
-    public HomeController(ILogger<HomeController> logger)
+    public HomeController(ILogger<HomeController> logger, GrpcGreeterClient.Greeter.GreeterClient client)
     {
         _logger = logger;
+        _client = client;
     }
 
     public IActionResult Index()
     {
-        var channel = GrpcChannel.ForAddress("http://localhost:5171");
-        var client = new GrpcGreeterClient.Greeter.GreeterClient(channel);
-        var result = client.SayHello(new GrpcGreeterClient.HelloRequest { Name = "paynow" });
+        // var channel = GrpcChannel.ForAddress("http://localhost:5171");
+        // var client = new GrpcGreeterClient.Greeter.GreeterClient(channel);
+        try {
+            var result = _client.SayHello(new GrpcGreeterClient.HelloRequest { Name = "paynow" });
 
-         return Json(new {result=result.Message});
+            return Json(new {result=result.Message});
+        } catch (Exception ex) {
+            _logger.LogError(ex, "Error calling gRPC service");
+
+            return Json(new {error=ex.Message});
+        }
     }
 
     public IActionResult Privacy()

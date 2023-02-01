@@ -1,5 +1,11 @@
 var builder = WebApplication.CreateBuilder(args);
 
+
+builder.Services.AddGrpcClient<GrpcGreeterClient.Greeter.GreeterClient>(o =>
+{
+    o.Address = new Uri("http://localhost:5171");
+});
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
