@@ -21,9 +21,14 @@ public class HomeController : Controller
         // var channel = GrpcChannel.ForAddress("http://localhost:5171");
         // var client = new GrpcGreeterClient.Greeter.GreeterClient(channel);
         try {
-            var result = _client.SayHello(new GrpcGreeterClient.HelloRequest { Name = "paynow" });
+            var request = new GrpcGreeterClient.HelloRequest();
+            request.Name = "paynow";
 
-            return Json(new {result=result.Message});
+            var result = _client.SayHello(request);
+
+            return Json(new {
+                result=result,
+            });
         } catch (Exception ex) {
             _logger.LogError(ex, "Error calling gRPC service");
 
