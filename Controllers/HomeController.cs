@@ -16,12 +16,11 @@ public class HomeController : Controller
 
     public IActionResult Index()
     {
-          return View();
-        // var channel = GrpcChannel.ForAddress("http://localhost:5171");
-        // var client = new GrpcGreeterClient.Greeter.GreeterClient(channel);
-        // var result = client.SayHello(new GrpcGreeterClient.HelloRequest { Name = "paynow" });
+        var channel = GrpcChannel.ForAddress("http://localhost:5171");
+        var client = new GrpcGreeterClient.Greeter.GreeterClient(channel);
+        var result = client.SayHello(new GrpcGreeterClient.HelloRequest { Name = "paynow" });
 
-        //  return Json(new {foo="bar", baz=result.Message});
+         return Json(new {result=result.Message});
     }
 
     public IActionResult Privacy()
